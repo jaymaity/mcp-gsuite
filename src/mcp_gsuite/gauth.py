@@ -200,10 +200,12 @@ def get_authorization_url(email_address, state):
     Authorization URL to redirect the user to.
     """
     flow = flow_from_clientsecrets(CLIENTSECRETS_LOCATION, ' '.join(SCOPES), redirect_uri=REDIRECT_URI)
+    flow.params['response_type'] = 'code'
     flow.params['access_type'] = 'offline'
     flow.params['approval_prompt'] = 'force'
     flow.params['user_id'] = email_address
     flow.params['state'] = state
+    
     return flow.step1_get_authorize_url(state=state)
 
 

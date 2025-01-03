@@ -8,6 +8,7 @@ import traceback
 from dotenv import load_dotenv
 from mcp.server import Server
 import threading
+import webbrowser
 from mcp.types import (
     Tool,
     TextContent,
@@ -62,9 +63,18 @@ from . import toolhandler
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mcp-gsuite")
 
+
+def open_url(url):
+    try:
+        webbrowser.open(url)
+        logger.info(f"Opening URL: {url}")
+    except Exception as e:
+        logger.error(f"Failed to open URL: {url}. Error: {e}")
+
+
 def start_auth_flow(user_id: str):
     auth_url = gauth.get_authorization_url(user_id, state={})
-    subprocess.Popen(['open', auth_url])
+    open_url(auth_url)
 
     # start server for code callback
     server_address = ('', 4100)
